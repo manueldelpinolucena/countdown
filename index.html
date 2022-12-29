@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vandelvira Eventos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgb(210,233,219);
+            background: linear-gradient(90deg, rgba(210,233,219,1) 0%, rgba(196,225,234,1) 35%, rgba(201,158,201,1) 100%);
+        }
+        h2, h3{
+            margin: 0;
+            color: white;
+            font-size: 128px;
+            text-align: center;
+        }
+        h3{
+            font-size: 68px;
+            min-height: 80px;
+        }
+        img {
+            display: block;
+            height: 120px;
+            margin: 0 auto;        
+        }
+        
+
+    </style>
+    <script src="moment.js"></script>
+</head>
+<body>
+    <img src="PRINCIPAL_DEGRADADO.png"/>
+    <h2 id="counter">24:60:60</h2>
+    <h3 id="message"></h3>
+
+    <script>
+        const END = '30/12/2022 11:00:00';
+        const messages = [
+            {
+                text: 'Hola',
+                hour: '30/12/2022 10:04:00',
+                minutesBefore: 3,
+                minutesAfter: -3
+            }
+        ];
+
+        function get2digits(digits){
+            if(digits.toString().length >=2) {
+                return digits;
+            }
+            return `0${digits}`
+        }
+
+        function getCountDown(end) {
+            const endDate = moment(end,'DD/MM/YYYY HH:mm:ss')
+            const now = moment()
+            const hours = endDate.diff(now, 'hours');
+            let minutes = endDate.diff(now, 'minutes');
+            let seconds = endDate.diff(now, 'seconds');
+
+            minutes -= hours * 60;
+            seconds -= minutes * 60 + hours * 60 * 60;
+            return {
+                seconds,
+                minutes,
+                hours,
+            }
+        }
+        let initialHours = 24;
+        let initialMinutes = 60;
+        let initialSeconds = 60;
+
+        const firstInterval = setInterval(() => {
+            const {hours, minutes, seconds} = getCountDown(END);
+
+            if(hours === initialHours && minutes === initialMinutes && seconds === initialSeconds) {
+                return counter();
+            }
+
+            if(hours < initialHours) {
+                initialHours -= 1;
+            }
+            if(minutes < initialMinutes) {
+                initialMinutes -= 1;
+            }
+            if(seconds < initialSeconds) {
+                initialSeconds -= 1;
+            }
+          
+            document.getElementById('counter').innerHTML = 
+                `${get2digits(initialHours)}:${get2digits(initialMinutes)}:${get2digits(initialSeconds)}`;
+        }, 30)
+
+        function counter() {
+            clearInterval(firstInterval)
+            setInterval(() => {
+                const {hours, minutes, seconds} = getCountDown(END);
+           
+                const counterHTML = `${get2digits(hours)}:${get2digits(minutes)}:${get2digits(seconds)}`;
+                document.getElementById('counter').innerHTML = counterHTML;
+
+                const message = messages.find(m => {
+                    const {hours, minutes, seconds} = getCountDown(m.hour);
+                    return hours === 0 && minutes < m.minutesBefore && minutes > m.minutesAfter;
+                })
+                
+                if(message) {
+                    document.getElementById('message').innerHTML = message.text;
+                } 
+
+            }, 500)
+        }
+    </script>
+</body>
+</html>
