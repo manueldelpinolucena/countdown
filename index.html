@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json" />
     <title>Vandelvira Eventos</title>
     <style>
         body {
@@ -14,7 +15,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #000
+            background: #000;
+            gap: 3em;
         }
         h2, h3{
             margin: 0;
@@ -25,6 +27,7 @@
             background: linear-gradient(90deg, rgba(210,233,219,1) 0%, rgba(196,225,234,1) 35%, rgba(201,158,201,1) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-family: ui-monospace;
         }
         h3{
             font-size: 3vw;
@@ -53,49 +56,42 @@
     <h3 id="message" class="pulse"></h3>
 
     <script>
-        const END = '31/12/2022 11:00:00';
+        const END = '31/12/2022 12:00:00';
         const messages = [
             {
                 text: 'CARRO DE GOMINOLAS',
-                hour: '31/12/2022 11:25:00',
-                minutesBefore: 60,
-                minutesAfter: -60
+                hour: '31/12/2022 12:10:00',
+                secondsAfter: -120
             },
             {
                 text: 'CARRO DE CHURROS',
-                hour: '30/12/2022 11:28:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:20:30',
+                secondsAfter: -120
             },
             {
                 text: 'DINOSAURIO',
-                hour: '30/12/2022 11:31:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:25:00',
+                secondsAfter: -120
             },
             {
                 text: 'CARRO DE GOMINOLAS',
-                hour: '30/12/2022 11:34:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:30:00',
+                secondsAfter: -120
             },
             {
                 text: '"12 🍇" VANDELVIRA',
-                hour: '30/12/2022 11:38:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:35:00',
+                secondsAfter: -120
             },
             {
                 text: 'RECENA',
-                hour: '30/12/2022 11:41:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:40:00',
+                secondsAfter: -120
             },
             {
                 text: 'THE END',
-                hour: '30/12/2022 10:44:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 12:45:00',
+                secondsAfter: -120
             }
         ];
 
@@ -157,16 +153,25 @@
                 const counterHTML = `${get2digits(hours)}:${get2digits(minutes)}:${get2digits(seconds)}`;
                 document.getElementById('counter').innerHTML = counterHTML;
 
-                const message = messages.find(m => {
+                let message;
+                message = messages.find(m => {
                     const {hours, minutes, seconds} = getCountDown(m.hour);
-                    return hours === 0 && minutes < m.minutesBefore && minutes > m.minutesAfter;
+                    if(hours === 0 && minutes === 0){
+                        console.log({seconds, secondsAfter: m.secondsAfter})
+                    }
+                    return hours === 0 && minutes === 0 && seconds <= 0 && seconds > m.secondsAfter;
                 })
                 
-                if(message) {
-                    document.getElementById('message').innerHTML = message.text;
-                } 
-
+                document.getElementById('message').innerHTML =  message ? message.text : '';
             }, 500)
+        }
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then(res => console.log("service worker registered"))
+                .catch(err => console.log("service worker not registered", err))
+            })
         }
     </script>
 </body>
