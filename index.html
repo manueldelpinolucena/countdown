@@ -61,38 +61,38 @@
         const messages = [
             {
                 text: 'CARRO DE GOMINOLAS',
-                hour: '31/12/2022 12:54:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:15:00',
+                minutesAfter: 2
             },
             {
                 text: 'CARRO DE CHURROS',
-                hour: '31/12/2022 12:56:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:17:00',
+                minutesAfter: 2
             },
             {
                 text: 'DINOSAURIO',
-                hour: '31/12/2022 12:58:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:19:00',
+                minutesAfter: 2
             },
             {
                 text: 'CARRO DE GOMINOLAS',
-                hour: '31/12/2022 13:00:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:21:00',
+                minutesAfter: 2
             },
             {
                 text: '"12 🍇" VANDELVIRA',
-                hour: '31/12/2022 13:02:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:23:00',
+                minutesAfter: 2
             },
             {
                 text: 'RECENA',
-                hour: '31/12/2022 13:04:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:25:00',
+                minutesAfter: 2
             },
             {
                 text: 'THE END',
-                hour: '31/12/2022 13:06:00',
-                secondsAfter: -120
+                hour: '31/12/2022 13:27:00',
+                minutesAfter: 2
             }
         ];
 
@@ -134,8 +134,11 @@
 
                 let message;
                 message = messages.find(m => {
-                    const {hours, minutes, seconds} = getCountDown(m.hour); 
-                    return hours === 0 && minutes === 0 && seconds <= 0 && seconds > m.secondsAfter;
+                    const {hours, minutes, seconds} = getCountDown(m.hour);
+                    const endDate = moment(m.hour,'DD/MM/YYYY HH:mm:ss').add(m.minutesAfter, 'minutes');
+                    const startDate = moment(m.hour,'DD/MM/YYYY HH:mm:ss');  
+                    console.log({ text: m.text,isBefore: moment().isBefore(endDate), isAfter: moment().isAfter(startDate)})
+                    return moment().isBefore(endDate) && moment().isAfter(startDate);
                 })
                 
                 document.getElementById('message').innerHTML =  message ? message.text : '';
