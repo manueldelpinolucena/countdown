@@ -14,23 +14,33 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgb(210,233,219);
-            background: linear-gradient(90deg, rgba(210,233,219,1) 0%, rgba(196,225,234,1) 35%, rgba(201,158,201,1) 100%);
+            background: #000
         }
         h2, h3{
             margin: 0;
             color: white;
-            font-size: 128px;
+            font-size: 13vw;
             text-align: center;
+            background: rgb(210,233,219);
+            background: linear-gradient(90deg, rgba(210,233,219,1) 0%, rgba(196,225,234,1) 35%, rgba(201,158,201,1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         h3{
-            font-size: 68px;
+            font-size: 3vw;
             min-height: 80px;
         }
         img {
             display: block;
             height: 120px;
             margin: 0 auto;        
+        }
+        .pulse {
+            animation: pulse 1s infinite ease-in-out alternate;
+        }
+        @keyframes pulse {
+            from { transform: scale(0.9); }
+            to { transform: scale(1.1); }
         }
         
 
@@ -40,16 +50,16 @@
 <body>
     <img src="PRINCIPAL_DEGRADADO.png"/>
     <h2 id="counter">24:60:60</h2>
-    <h3 id="message"></h3>
+    <h3 id="message" class="pulse"></h3>
 
     <script>
-        const END = '30/12/2022 20:00:00';
+        const END = '31/12/2022 11:00:00';
         const messages = [
             {
                 text: 'CARRO DE GOMINOLAS',
-                hour: '30/12/2022 11:25:00',
-                minutesBefore: 1,
-                minutesAfter: -1
+                hour: '31/12/2022 11:25:00',
+                minutesBefore: 60,
+                minutesAfter: -60
             },
             {
                 text: 'CARRO DE CHURROS',
@@ -70,7 +80,7 @@
                 minutesAfter: -1
             },
             {
-                text: '12 🍇 VANDELVIRA',
+                text: '"12 🍇" VANDELVIRA',
                 hour: '30/12/2022 11:38:00',
                 minutesBefore: 1,
                 minutesAfter: -1
@@ -90,6 +100,9 @@
         ];
 
         function get2digits(digits){
+            if(digits < 0) {
+                return `00`; 
+            }
             if(digits.toString().length >=2) {
                 return digits;
             }
