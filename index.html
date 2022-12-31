@@ -125,29 +125,7 @@
         let initialMinutes = 60;
         let initialSeconds = 60;
 
-        const firstInterval = setInterval(() => {
-            const {hours, minutes, seconds} = getCountDown(END);
-
-            if(hours === initialHours && minutes === initialMinutes && seconds === initialSeconds) {
-                return counter();
-            }
-
-            if(hours < initialHours) {
-                initialHours -= 1;
-            }
-            if(minutes < initialMinutes) {
-                initialMinutes -= 1;
-            }
-            if(seconds < initialSeconds) {
-                initialSeconds -= 1;
-            }
-          
-            document.getElementById('counter').innerHTML = 
-                `${get2digits(initialHours)}:${get2digits(initialMinutes)}:${get2digits(initialSeconds)}`;
-        }, 30)
-
         function counter() {
-            clearInterval(firstInterval)
             setInterval(() => {
                 const {hours, minutes, seconds} = getCountDown(END);
            
@@ -156,24 +134,14 @@
 
                 let message;
                 message = messages.find(m => {
-                    const {hours, minutes, seconds} = getCountDown(m.hour);
-                    if(hours === 0 && minutes === 0){
-                        console.log({seconds, secondsAfter: m.secondsAfter})
-                    }
+                    const {hours, minutes, seconds} = getCountDown(m.hour); 
                     return hours === 0 && minutes === 0 && seconds <= 0 && seconds > m.secondsAfter;
                 })
                 
                 document.getElementById('message').innerHTML =  message ? message.text : '';
             }, 1000)
         }
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", function() {
-                navigator.serviceWorker
-                .register("/serviceWorker.js")
-                .then(res => console.log("service worker registered"))
-                .catch(err => console.log("service worker not registered", err))
-            })
-        }
+        counter();
     </script>
 </body>
 </html>
